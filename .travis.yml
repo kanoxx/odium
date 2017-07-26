@@ -1,0 +1,27 @@
+dist: trusty
+sudo: false
+
+language: java
+
+jdk:
+  - openjdk8
+  - oraclejdk8
+  - oraclejdk9
+
+script: ./gradlew :odium-core:build
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - jdk: oraclejdk9
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ./gradlew :odium-core:publish -PdeployUrl="${DEPLOY_URL}" -PdeployUser="${DEPLOY_USER}" -PdeployPass="${DEPLOY_PASS}"
+    on:
+      tags: true
+      jdk: oraclejdk8
+
+notifications:
+  email: false
