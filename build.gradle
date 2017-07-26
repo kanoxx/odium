@@ -1,0 +1,64 @@
+plugins {
+    id 'java-base'
+    id 'net.minecrell.licenser' version '0.3' apply false
+}
+
+allprojects {
+    group 'net.xnity'
+    version '1.0.0'
+}
+
+ext {
+    nmsModules = subprojects - project(':odium-core')
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'net.minecrell.licenser'
+
+    repositories {
+        mavenCentral()
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileJava {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        options.encoding = 'UTF-8'
+    }
+
+    compileTestJava {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        options.encoding = 'UTF-8'
+    }
+
+    processResources {
+        from 'LICENSE.txt'
+    }
+
+    license {
+        header = rootProject.file('HEADER.txt')
+        newLine = true
+        include '**/*.java'
+    }
+
+    if (project in nmsModules) {
+        apply from: rootProject.file('gradle/nms.gradle')
+    }
+}
+
+task mergedJar(type: Jar, dependsOn: subprojects.tasks['build'] ) {
+    group = 'build'
+    subprojects.each { sub ->
+        from sub.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+}
+
+artifacts {
+    archives mergedJar
+}
