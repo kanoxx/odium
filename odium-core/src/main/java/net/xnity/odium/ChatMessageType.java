@@ -24,25 +24,9 @@
 
 package net.xnity.odium;
 
-import java.util.Optional;
-import org.bukkit.command.CommandMap;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+public enum ChatMessageType {
 
-public final class OdiumImpl implements IOdium {
-
-  @Override
-  public Optional<CommandMap> getCommandMap() {
-    return Optional.empty();
-  }
-
-  @Override
-  public Optional<String> itemToJson(ItemStack itemStack) {
-    return Optional.empty();
-  }
-
-  @Override
-  public boolean sendJsonMessage(Player player, String json, ChatMessageType type) {
-    return false;
-  }
+  CHAT,
+  SYSTEM,
+  ACTION_BAR
 }

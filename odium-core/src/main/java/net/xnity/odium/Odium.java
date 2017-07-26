@@ -28,6 +28,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class Odium {
@@ -61,5 +62,9 @@ public final class Odium {
 
   public static Optional<String> itemToJson(ItemStack itemStack) {
     return getOdium().map(o -> o.itemToJson(itemStack).orElse(null));
+  }
+
+  public static boolean sendJsonMessage(Player player, String json, ChatMessageType type) {
+    return getOdium().map(o -> o.sendJsonMessage(player, json, type)).orElse(false);
   }
 }

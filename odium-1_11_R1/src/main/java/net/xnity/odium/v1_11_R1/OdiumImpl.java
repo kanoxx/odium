@@ -25,12 +25,17 @@
 package net.xnity.odium.v1_11_R1;
 
 import java.util.Optional;
+import net.minecraft.server.v1_11_R1.IChatBaseComponent;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.Packet;
+import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
 import net.xnity.odium.IOdium;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class OdiumImpl implements IOdium {
@@ -43,5 +48,30 @@ public final class OdiumImpl implements IOdium {
   @Override
   public Optional<String> itemToJson(ItemStack itemStack) {
     return Optional.ofNullable(CraftItemStack.asNMSCopy(itemStack).save(new NBTTagCompound()).toString());
+  }
+
+  private static void send(Player player, Packet packet) throws Exception {
+    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+  }
+
+  private static byte convert(net.xnity.odium.ChatMessageType type) {
+    switch (type) {
+      case ACTION_BAR:
+        return (byte) 2;
+      case SYSTEM:
+        return (byte) 1;
+      default:
+        return (byte) 0;
+    }
+  }
+
+  @Override
+  public boolean sendJsonMessage(Player player, String json, net.xnity.odium.ChatMessageType type) {
+    try {
+      send(player, new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(json), convert(type)));
+      return true;
+    } catch (Throwable throwable) {
+      return false;
+    }
   }
 }

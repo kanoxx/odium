@@ -26,6 +26,7 @@ package net.xnity.odium;
 
 import java.util.Optional;
 import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public interface IOdium {
@@ -33,4 +34,6 @@ public interface IOdium {
   Optional<CommandMap> getCommandMap();
 
   Optional<String> itemToJson(ItemStack itemStack);
+
+  boolean sendJsonMessage(Player player, String json, ChatMessageType type);
 }
