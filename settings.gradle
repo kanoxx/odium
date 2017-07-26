@@ -5,6 +5,6 @@ include 'odium-1_11_R1'
 include 'odium-1_12_R1'
 
 rootProject.children.each {
-    assert it.projectDir.isDirectory()
-    assert it.buildFile.isFile()
+  assert it.projectDir.isDirectory()
+  assert it.buildFile.isFile()
 }
